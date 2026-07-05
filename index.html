@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeHub - Local Classifieds</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: #fff; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        input, textarea, button { width: 100%; padding: 10px; margin: 10px 0; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; }
+        button { background: #0070f3; font-weight: bold; cursor: pointer; border: none; }
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; padding: 20px; border: 2px solid #0070f3; z-index: 1000; text-align: center; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Deploy Ad to Grid</h2>
+        <form id="adForm">
+            <input type="text" id="phone" placeholder="Verified Phone Number" required>
+            <input type="text" id="title" placeholder="Product Title (e.g., Laserworld Xerox Paper)" required>
+            <input type="number" id="price" placeholder="Price" required>
+            <textarea id="description" placeholder="Ad Description" rows="4" required></textarea>
+            <button type="submit">Deploy Ad to Grid</button>
+        </form>
+    </div>
+
+    <div id="retentionModal" class="modal">
+        <p>Did you sell your product yet? Remove this ad to reset your daily limit and post a new ad!</p>
+        <button id="deleteAdBtn" style="background: #e00;">Yes, Remove Ad</button>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        // Form Submission Pipeline
+        document.getElementById('adForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                phone: document.getElementById('phone').value,
+                title: document.getElementById('title').value,
+                price: document.getElementById('price').value,
+                description: document.getElementById('description').value
+            };
+
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/api/submit_listing`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                
+                if (res.status === 201) {
+                    alert("Listing deployed successfully!");
+                    checkUserStatus(payload.phone);
+                } else {
+                    alert(`Firewall Restriction: ${data.message || 'Limit reached'}`);
+                }
+            } catch (err) {
+                alert("Connection bottleneck to backend engine.");
+            }
+        });
+
+        // Verification Check for Daily Retention Prompt
+        async function checkUserStatus(phone) {
+            try {
+                const res = await fetch(`${CONFIG.API_BASE_URL}/api/user_status?phone=${phone}`);
+                const data = await res.json();
+                if (data.prompt_active) {
+                    document.getElementById('retentionModal').style.display = 'block';
+                    document.getElementById('deleteAdBtn').onclick = async () => {
+                        const delRes = await fetch(`${CONFIG.API_BASE_URL}/api/delete_listing`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ phone: phone })
+                        });
+                        if (delRes.ok) {
+                            alert("Ad cleared. Velocity limit reset!");
+                            document.getElementById('retentionModal').style.display = 'none';
+                        }
+                    };
+                }
+            } catch (err) {
+                console.error("Status check offline.");
+            }
+        }
+    </script>
+</body>
+</html>
+
