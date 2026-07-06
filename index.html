@@ -6,8 +6,8 @@
     <title>TradeHub | Local Classifieds & Services</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="config.js"></script> <style>
-        /* Smooth transitions for our multi-page feel */
+    <script src="config.js"></script>
+    <style>
         .view-section { display: none; animation: fadeIn 0.3s ease-in-out; }
         .active-view { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -41,7 +41,6 @@
     </nav>
 
     <main id="home-view" class="view-section active-view max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
         <div class="mb-8 flex space-x-4 overflow-x-auto pb-2">
             <button class="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 hover:border-blue-500 whitespace-nowrap">
                 <i class="fa-solid fa-car text-gray-600"></i><span>Vehicles</span>
@@ -60,7 +59,6 @@
         <h2 class="text-2xl font-bold mb-6 text-gray-800">Fresh Recommendations</h2>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="ad-grid">
-            
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition duration-200 cursor-pointer">
                 <div class="h-48 bg-gray-200 flex items-center justify-center">
                     <i class="fa-solid fa-print text-4xl text-gray-400"></i>
@@ -88,21 +86,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition duration-200 cursor-pointer">
-                <div class="h-48 bg-gray-200 flex items-center justify-center">
-                    <i class="fa-solid fa-handshake-angle text-4xl text-gray-400"></i>
-                </div>
-                <div class="p-4">
-                    <h3 class="text-xl font-bold text-gray-900">Tier 1 Badge</h3>
-                    <p class="text-sm text-gray-600 mt-1 line-clamp-2">Business Consultant & B2B Strategy Planning</p>
-                    <div class="flex justify-between items-center mt-4 text-xs text-gray-500">
-                        <span>Verified Account</span>
-                        <span>2 DAYS AGO</span>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </main>
 
@@ -140,7 +123,7 @@
                     </div>
                     <div class="bg-blue-50 p-4 rounded-md border border-blue-100 flex items-start">
                         <i class="fa-solid fa-shield-halved text-blue-500 mt-1 mr-3"></i>
-                        <p class="text-sm text-blue-800"><strong>Velocity Firewall Active:</strong> Free tier users are limited to 1 post per 24 hours to prevent spam.</p>
+                        <p class="text-sm text-blue-800"><strong>Velocity Firewall Active:</strong> Free tier users are limited to 1 post per 24 hours.</p>
                     </div>
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md shadow transition duration-200">
                         Deploy Ad to Grid
@@ -151,50 +134,17 @@
     </main>
 
     <script>
-        // Multi-page simulator
         function switchView(viewId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
             document.getElementById(viewId).classList.add('active-view');
             window.scrollTo(0, 0);
         }
 
-        // Backend Integration
         async function submitAd(event) {
             event.preventDefault();
-            
-            const title = document.getElementById('ad-title').value;
-            const price = document.getElementById('ad-price').value;
-            const category = document.getElementById('ad-category').value;
-            const desc = document.getElementById('ad-desc').value;
-
-            // Uses the globally available configURL from config.js
-            try {
-                // Placeholder fetch command structured for your Python backend
-                /*
-                const response = await fetch(`${configURL}/api/post_ad`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title, price, category, desc })
-                });
-                
-                if (response.ok) {
-                    alert('Ad successfully deployed to TradeHub!');
-                    switchView('home-view');
-                    document.getElementById('ad-form').reset();
-                } else {
-                    alert('Velocity Firewall blocked submission: Limit Reached.');
-                }
-                */
-                
-                // Temporary success simulation until your Termux backend routes are fully matched
-                alert('Success: Ad successfully deployed to TradeHub! (Simulated)');
-                switchView('home-view');
-                document.getElementById('ad-form').reset();
-
-            } catch (error) {
-                console.error("Connection Error:", error);
-                alert("Failed to connect to the backend server. Is Ngrok running?");
-            }
+            alert('Success: Ad successfully deployed to TradeHub! (Simulated)');
+            switchView('home-view');
+            document.getElementById('ad-form').reset();
         }
     </script>
 </body>
