@@ -3,84 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TradeHub - Local Classifieds</title>
-    <style>
-        body { font-family: sans-serif; background: #121212; color: #fff; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; }
-        input, textarea, button { width: 100%; padding: 10px; margin: 10px 0; background: #222; color: #fff; border: 1px solid #444; border-radius: 5px; }
-        button { background: #0070f3; font-weight: bold; cursor: pointer; border: none; }
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; padding: 20px; border: 2px solid #0070f3; z-index: 1000; text-align: center; border-radius: 8px; }
+    <title>TradeHub | Local Classifieds & Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="config.js"></script> <style>
+        /* Smooth transitions for our multi-page feel */
+        .view-section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .active-view { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h2>Deploy Ad to Grid</h2>
-        <form id="adForm">
-            <input type="text" id="phone" placeholder="Verified Phone Number" required>
-            <input type="text" id="title" placeholder="Product Title (e.g., Laserworld Xerox Paper)" required>
-            <input type="number" id="price" placeholder="Price" required>
-            <textarea id="description" placeholder="Ad Description" rows="4" required></textarea>
-            <button type="submit">Deploy Ad to Grid</button>
-        </form>
-    </div>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
 
-    <div id="retentionModal" class="modal">
-        <p>Did you sell your product yet? Remove this ad to reset your daily limit and post a new ad!</p>
-        <button id="deleteAdBtn" style="background: #e00;">Yes, Remove Ad</button>
-    </div>
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center cursor-pointer" onclick="switchView('home-view')">
+                    <i class="fa-solid fa-bolt text-blue-600 text-2xl mr-2"></i>
+                    <span class="font-bold text-2xl tracking-tight text-gray-900">TradeHub</span>
+                </div>
+                <div class="hidden md:flex flex-1 mx-8">
+                    <div class="w-full relative">
+                        <input type="text" placeholder="Find cars, mobile phones and more..." class="w-full border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button class="absolute right-0 top-0 h-full px-4 text-gray-500 hover:text-blue-600">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="font-medium text-gray-700 hover:text-blue-600">Login</button>
+                    <button onclick="switchView('post-ad-view')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full shadow-md transition duration-200">
+                        <i class="fa-solid fa-plus mr-1"></i> SELL
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-    <script src="config.js"></script>
+    <main id="home-view" class="view-section active-view max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div class="mb-8 flex space-x-4 overflow-x-auto pb-2">
+            <button class="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 hover:border-blue-500 whitespace-nowrap">
+                <i class="fa-solid fa-car text-gray-600"></i><span>Vehicles</span>
+            </button>
+            <button class="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 hover:border-blue-500 whitespace-nowrap">
+                <i class="fa-solid fa-mobile-screen text-gray-600"></i><span>Electronics</span>
+            </button>
+            <button class="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 hover:border-blue-500 whitespace-nowrap">
+                <i class="fa-solid fa-briefcase text-gray-600"></i><span>B2B Consulting</span>
+            </button>
+            <button class="flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 hover:border-blue-500 whitespace-nowrap">
+                <i class="fa-solid fa-print text-gray-600"></i><span>Print & Services</span>
+            </button>
+        </div>
+
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">Fresh Recommendations</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="ad-grid">
+            
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition duration-200 cursor-pointer">
+                <div class="h-48 bg-gray-200 flex items-center justify-center">
+                    <i class="fa-solid fa-print text-4xl text-gray-400"></i>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-xl font-bold text-gray-900">₹ 450</h3>
+                    <p class="text-sm text-gray-600 mt-1 line-clamp-2">Laserworld Xerox Surplus High-Speed Paper</p>
+                    <div class="flex justify-between items-center mt-4 text-xs text-gray-500">
+                        <span>83/1 Linton Street, Kolkata</span>
+                        <span>TODAY</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition duration-200 cursor-pointer">
+                <div class="h-48 bg-gray-200 flex items-center justify-center">
+                    <i class="fa-solid fa-trowel-bricks text-4xl text-gray-400"></i>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-xl font-bold text-gray-900">Custom Quote</h3>
+                    <p class="text-sm text-gray-600 mt-1 line-clamp-2">Shivam Construction - Commercial Contracting</p>
+                    <div class="flex justify-between items-center mt-4 text-xs text-gray-500">
+                        <span>Kolkata Region</span>
+                        <span>YESTERDAY</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition duration-200 cursor-pointer">
+                <div class="h-48 bg-gray-200 flex items-center justify-center">
+                    <i class="fa-solid fa-handshake-angle text-4xl text-gray-400"></i>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-xl font-bold text-gray-900">Tier 1 Badge</h3>
+                    <p class="text-sm text-gray-600 mt-1 line-clamp-2">Business Consultant & B2B Strategy Planning</p>
+                    <div class="flex justify-between items-center mt-4 text-xs text-gray-500">
+                        <span>Verified Account</span>
+                        <span>2 DAYS AGO</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <main id="post-ad-view" class="view-section max-w-3xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md border border-gray-200 p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-gray-800">Post Your Ad</h2>
+                <button onclick="switchView('home-view')" class="text-gray-400 hover:text-red-500">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
+            </div>
+            
+            <form id="ad-form" onsubmit="submitAd(event)">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Ad Title</label>
+                        <input type="text" id="ad-title" required class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
+                        <input type="number" id="ad-price" required class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                        <select id="ad-category" class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Services & Consulting</option>
+                            <option>Electronics</option>
+                            <option>Vehicles</option>
+                            <option>B2B Wholesale</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <textarea id="ad-desc" rows="4" required class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-md border border-blue-100 flex items-start">
+                        <i class="fa-solid fa-shield-halved text-blue-500 mt-1 mr-3"></i>
+                        <p class="text-sm text-blue-800"><strong>Velocity Firewall Active:</strong> Free tier users are limited to 1 post per 24 hours to prevent spam.</p>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md shadow transition duration-200">
+                        Deploy Ad to Grid
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
     <script>
-        // Form Submission Pipeline
-        document.getElementById('adForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const payload = {
-                phone: document.getElementById('phone').value,
-                title: document.getElementById('title').value,
-                price: document.getElementById('price').value,
-                description: document.getElementById('description').value
-            };
+        // Multi-page simulator
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
+            document.getElementById(viewId).classList.add('active-view');
+            window.scrollTo(0, 0);
+        }
 
+        // Backend Integration
+        async function submitAd(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('ad-title').value;
+            const price = document.getElementById('ad-price').value;
+            const category = document.getElementById('ad-category').value;
+            const desc = document.getElementById('ad-desc').value;
+
+            // Uses the globally available configURL from config.js
             try {
-                const res = await fetch(`${CONFIG.API_BASE_URL}/api/submit_listing`, {
+                // Placeholder fetch command structured for your Python backend
+                /*
+                const response = await fetch(`${configURL}/api/post_ad`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ title, price, category, desc })
                 });
-                const data = await res.json();
                 
-                if (res.status === 201) {
-                    alert("Listing deployed successfully!");
-                    checkUserStatus(payload.phone);
+                if (response.ok) {
+                    alert('Ad successfully deployed to TradeHub!');
+                    switchView('home-view');
+                    document.getElementById('ad-form').reset();
                 } else {
-                    alert(`Firewall Restriction: ${data.message || 'Limit reached'}`);
+                    alert('Velocity Firewall blocked submission: Limit Reached.');
                 }
-            } catch (err) {
-                alert("Connection bottleneck to backend engine.");
-            }
-        });
+                */
+                
+                // Temporary success simulation until your Termux backend routes are fully matched
+                alert('Success: Ad successfully deployed to TradeHub! (Simulated)');
+                switchView('home-view');
+                document.getElementById('ad-form').reset();
 
-        // Verification Check for Daily Retention Prompt
-        async function checkUserStatus(phone) {
-            try {
-                const res = await fetch(`${CONFIG.API_BASE_URL}/api/user_status?phone=${phone}`);
-                const data = await res.json();
-                if (data.prompt_active) {
-                    document.getElementById('retentionModal').style.display = 'block';
-                    document.getElementById('deleteAdBtn').onclick = async () => {
-                        const delRes = await fetch(`${CONFIG.API_BASE_URL}/api/delete_listing`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ phone: phone })
-                        });
-                        if (delRes.ok) {
-                            alert("Ad cleared. Velocity limit reset!");
-                            document.getElementById('retentionModal').style.display = 'none';
-                        }
-                    };
-                }
-            } catch (err) {
-                console.error("Status check offline.");
+            } catch (error) {
+                console.error("Connection Error:", error);
+                alert("Failed to connect to the backend server. Is Ngrok running?");
             }
         }
     </script>
